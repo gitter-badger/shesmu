@@ -356,6 +356,7 @@ class NiassaServer extends JsonPluginFile<Configuration> {
   private final DirectoryAndIniCache directoryAndIniCache;
   private String host;
   private final Map<String, Integer> maxInFlight = new ConcurrentHashMap<>();
+  private final Map<String, Integer> maxFailed = new ConcurrentHashMap<>();
   private final MaxInFlightCache maxInFlightCache;
   private MetadataWS metadata;
   private Properties settings = new Properties();
@@ -430,6 +431,7 @@ class NiassaServer extends JsonPluginFile<Configuration> {
     if (workflowAccession < 1) {
       return MaxStatus.INVALID_SWID;
     }
+    // TODO: figure out how to get current failed without nuking Niassa
     return maxInFlightCache
         .get(workflowAccession)
         .map(
@@ -504,6 +506,7 @@ class NiassaServer extends JsonPluginFile<Configuration> {
                     .forEach(
                         wc -> {
                           maxInFlight.put(prefix + wc.first(), wc.second().getMaxInFlight());
+                          maxFailed.put(prefix + wc.first(), wc.second().getMaxFailed());
                           wc.second().define(prefix + wc.first(), definer);
                         }));
   }

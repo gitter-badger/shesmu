@@ -306,6 +306,11 @@ public final class WorkflowAction extends Action {
                   Collections.singletonList(
                       "Too many workflows running. Sit tight or increase max-in-flight setting.");
               return ActionState.WAITING;
+            case TOO_MANY_FAILED:
+              this.errors =
+                  Collections.singletonList(
+                      "Too many workflows failed. This workflow is probably bad.");
+              return ActionState.FAILED;
             case INVALID_SWID:
               this.errors =
                   Collections.singletonList(

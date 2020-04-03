@@ -73,6 +73,7 @@ Each workflow is configured in a separate file named
       "annotations": {},
       "type": "FILES",
       "maxInFlight": 3,
+      "maxFailed": 30,
       "parameters": [],
       "previousAccessions": [],
       "services": [
@@ -91,7 +92,9 @@ array. The `maxInFlight` is a best-effort attempt to limit the number of
 simultaneous workflow runs launched by this olive. The `services` list is the
 name of services presented to throttlers to block launching of this workflow.
 A workflow will use the union of the services in the `.niassa` file and the
-`.niassawf` file.
+`.niassawf` file. The `maxInFlight` is a best-effort way to stop a workflow
+that's probably broken. It will prevent launching new jobs if too many siblings
+are failed.
 
 The `annotations` are workflow run attributes (as key-value pairs) that will be
 attached to the created run and will be used for matching existing workflow
